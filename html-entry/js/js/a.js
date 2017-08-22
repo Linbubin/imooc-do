@@ -1,9 +1,11 @@
 var index = 0,
+		mainDiv = getById('main'),
 		divImg = getById('banner').getElementsByTagName('div'),
 		len = divImg.length-1,
 		prevBtn = getById('prev'),
 		nextBtn = getById('next'),
-		dotsImg = getById('dots').getElementsByTagName('span');
+		dotsImg = getById('dots').getElementsByTagName('span'),
+		timer;
 
 function getById(id){
 	return document.getElementById(id);
@@ -11,14 +13,12 @@ function getById(id){
 
 function toPrevImg(){
 	index = index == 0 ? len : index-1;
-	changeImg();
-	changeDots();
+	changeDotsAndImg();
 }
 
 function toNextImg(){
 	index = index == len ? 0 : index+1;
-	changeImg();
-	changeDots();
+	changeDotsAndImg();
 }
 
 function changeImg(){
@@ -55,5 +55,19 @@ function main(){
 			changeDotsAndImg();
 		}
 	}
+
+	mainDiv.onmouseover = function(){
+		console.log('over');
+		timer && clearInterval(timer);
+	}
+
+	mainDiv.onmouseout = function(){
+		console.log('out');
+		timer = setInterval(function(){
+			toNextImg();
+		}, 1000);
+	}
+	mainDiv.onmouseout();
+
 }
 main();
