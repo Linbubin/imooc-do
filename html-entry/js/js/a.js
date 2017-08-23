@@ -5,6 +5,11 @@ var index = 0,
 		prevBtn = getById('prev'),
 		nextBtn = getById('next'),
 		dotsImg = getById('dots').getElementsByTagName('span'),
+		menuFirst = document.getElementsByClassName('menu-first'),
+		subMenu = getById('sub-menu'),
+		innerBox = document.getElementsByClassName('inner-box'),
+		menu = getById('menu'),
+		subMenuIndex,
 		timer;
 
 function getById(id){
@@ -40,6 +45,13 @@ function changeDotsAndImg(){
 	changeDots();
 }
 
+function changeSubMenu(){
+	for(var z=0;z<innerBox.length;z++){
+		innerBox[z].style.display='none';
+	}
+	innerBox[subMenuIndex].style.display = 'block';
+}
+
 function main(){
 	prevBtn.onclick=function(){
 		toPrevImg();
@@ -54,6 +66,27 @@ function main(){
 			index = Number(this.id);
 			changeDotsAndImg();
 		}
+	}
+
+	for(var i=0;i<menuFirst.length; i++){
+		menuFirst[i].id = 'a' + i;
+		menuFirst[i].onmouseover = function(){
+			subMenu.className = "sub-menu";
+			subMenuIndex = this.id.replace('a','');
+			changeSubMenu();
+		}
+	}
+
+	menu.onmouseout = function(){
+		subMenu.className = "sub-menu hide";
+	}
+
+	subMenu.onmouseover = function(){
+		subMenu.className = "sub-menu";
+	}
+
+	subMenu.onmouseout = function(){
+		subMenu.className = "sub-menu hide";
 	}
 
 	mainDiv.onmouseover = function(){
