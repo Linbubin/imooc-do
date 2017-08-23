@@ -124,3 +124,43 @@ body {
 .menu-first:hover{
 	background: rgba(7, 17, 27, 0.4);
 }
+
+.sub-menu{
+	background: #fff;
+
+	position: absolute;
+	top: 0;
+	left: 224px;
+	z-index: 2;
+}
+
+.inner-box{
+	background: url('../img/fe.png') no-repeat;
+	width: 732px;
+	height: 460px;
+	margin-left: 30px;
+}
+
+.title{
+	color: red;
+	font-size: 16px;
+	line-height: 16px;
+	padding-top: 28px;
+	margin-bottom: 30px;
+}
+
+.sub-row {
+	margin-bottom: 25px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.mr10 {
+	margin-right: 10px;
+}
+
+.hide {
+	display: none;
+}
