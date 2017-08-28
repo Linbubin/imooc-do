@@ -40,7 +40,12 @@
 	<script type="text/javascript">
 		$(function(){
 			$('.cards').on('click', function(event){
-				$(event.target).css('text-indent', '0');
+                var div = $(event.target);
+				if(div.css('text-indent')=='-9999px'){
+                    div.css('text-indent', 0);
+                }else{
+                    div.css('text-indent', -9999);
+                };
 			})
 		})
 	</script>

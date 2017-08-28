@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>遮盖层</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+
+        .layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 0.5;
+            z-index: 999;
+            display: none;
+        }
+
+        .login{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 600px;
+            height: 400px;
+            background-color: red;
+            z-index: 1000;
+            display: none;
+        }
+
+        .close{
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 40px;
+            height: 40px;
+            background-color: green;
+            border-radius: 50%;
+            color: white;
+            line-height: 40px;
+            text-align: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button>sign in</button>
+    <div class="layer"></div>
+    <div class="login">
+        <div class="close">x</div>
+    </div>
+    <script type="text/javascript" src="./jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('button').click(function(){
+                $('.layer').show();
+                $('.login').show();
+            });
+            $('.close').click(function(){
+                $('.layer').hide();
+                $('.login').hide();
+            })
+        });
+    </script>
+</body>
+</html>
