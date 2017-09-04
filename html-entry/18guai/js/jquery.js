@@ -99,7 +99,7 @@ function setStyle(box, top, left, index) {
 function appendBox(wrap, boxes) {
 	var lastDiv = wrap.children('div').eq(-1);
 	// 窗口高度 + 窗口下拉高度 >= 最后一个div的高
-	if($(window).height() + $(window).scrollTop() >= lastDiv.height() + 40 + lastDiv.offset().top){
+	if($(window).height() + $(window).scrollTop() >= lastDiv.height() + 20 + lastDiv.offset().top){
 		for(var j=0;j<datas.length;j++) {
 			wrap.append('<div><img src="'+ datas[j].src +'"><a href="#">'+ datas[j].info +'</a></div>');
 		}
