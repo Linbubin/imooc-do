@@ -1,3 +1,4 @@
+
 function Square(props){
   return (
     <button className="square" onClick={props.onClick}>
@@ -6,51 +7,25 @@ function Square(props){
   )
 }
 
-function calculateWinner(squares){
-  const lines = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
-  ]
-
-  for(let j=0;j<lines.length; j++){
-    const [a,b,c] = lines[j];
-    if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
-      return squares[a];
-    }
-  }
-  return false;
-}
-
 class Board extends React.Component {
   renderSquare(i) {
-    return <Square value={this.props.squares[i]}
+    return <Square value={this.props.squares[i]} key={i}
              onClick={() => this.props.onClick(i)}/>;
   }
 
   render() {
+    let rows = [];
+    for(let z =0; z<3;z++){
+      let row = [];
+      for(let zz=z*3; zz < z*3+3;zz++){
+        row.push(this.renderSquare(zz));
+      }
+      rows.push(<div className="board-row" key={z}>{row}</div>);
+    }
+
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {rows}
       </div>
     );
   }
@@ -61,11 +36,36 @@ class Game extends React.Component {
     super();
     this.state = {
       history: [{
-        squares: Array(9).fill(null)
+        squares: Array(9).fill(null),
+        lastStep: ''
       }],
       xIsNext: true,
-      stepNum: 0
+      stepNum: 0,
+      reverse: false,
+      winnerIndex: ,
     }
+  }
+
+  calculateWinner(squares){
+    const lines = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ]
+
+    for(let j=0;j<lines.length; j++){
+      const [a,b,c] = lines[j];
+      if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
+        this.setState({winnerIndex: [a,b,c]});
+        return squares[a];
+      }
+    }
+    return false;
   }
 
   handleClick(i) {
@@ -73,14 +73,15 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNum +1);
     const current = history[history.length-1];
     const squares = current.squares.slice();
-    console.log(squares);
-    if(calculateWinner(squares) || calculateWinner(squares)){
+
+    if(squares[i] || calculateWinner(squares)){
       return ;
     }
     squares[i] = this.state.xIsNext ? 'x' : 'o';
     this.setState({
       history: history.concat([{
                 squares: squares,
+                lastStep: `(${Math.floor(i/3)+1}, ${i%3 + 1})`
               }]),
       xIsNext : !this.state.xIsNext,
       stepNum: this.state.stepNum + 1
@@ -94,6 +95,10 @@ class Game extends React.Component {
     })
   }
 
+  reverse(){
+    this.setState({reverse: !this.state.reverse});
+  }
+
   render() {
     const history = this.state.history.slice(0, this.state.stepNum+1);
     const current = history[history.length-1];
@@ -102,13 +107,22 @@ class Game extends React.Component {
 
     const moves = this.state.history.map((step, move) => {
       const desc = move ?
-        'Move #' + move :
+        'Move #' + step.lastStep :
         'Game start';
-      return (
-        <li key={move}  >
-          <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
-        </li>
-      );
+        if(move == this.state.stepNum){
+          return (
+            <li key={move}  >
+              <a href="#" onClick={() => this.jumpTo(move)}><strong>{desc}</strong></a>
+            </li>
+          );
+        }else{
+          return (
+            <li key={move}  >
+              <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
+            </li>
+          );
+        }
+
     });
 
 
@@ -123,11 +137,13 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={squares}
-            onClick={this.handleClick.bind(this)} />
+            onClick={this.handleClick.bind(this)}
+            winnerIndex={this.state.winnerIndex} />
         </div>
         <div className="game-info">
+          <div><input type="button" value="reverse" onClick={this.reverse.bind(this)} /></div>
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{!this.state.reverse ? moves : moves.reverse()}</ol>
         </div>
       </div>
     );
